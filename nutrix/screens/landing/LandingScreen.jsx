@@ -12,7 +12,7 @@ export default function LandingScreen({ navigation }) {
       <View style={style.buttonContainer}>
         <TouchableOpacity
           style={style.button}
-          onPress={() => navigation.navigate('Main')}
+          onPress={() => navigation.navigate('Main', { uri: 'https://www.google.com/' })}
         >
           <Text style={style.buttonText}>Let's start !!</Text>
         </TouchableOpacity>

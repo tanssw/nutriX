@@ -5,8 +5,6 @@ import { useFonts } from 'expo-font'
 import LandingScreen from './screens/landing/LandingScreen'
 import WebViewScreen from './screens/web-view/WebViewScreen'
 
-import NavigatorTemplate from './templates/NavigatorTemplate'
-
 const Stack = createNativeStackNavigator()
 
 export default function App() {
@@ -26,7 +24,7 @@ export default function App() {
       >
         <Stack.Screen name="Intro" component={LandingScreen} />
         <Stack.Screen name="SignUp" component={WebViewScreen} />
-        <Stack.Screen name="Main" component={NavigatorTemplate} />
+        <Stack.Screen name="Main" component={WebViewScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   )
