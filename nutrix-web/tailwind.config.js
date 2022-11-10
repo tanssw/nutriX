@@ -6,6 +6,9 @@ module.exports = {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
+    fontFamily: {
+      'body': ['Sukhumvit', 'sans']
+    },
     extend: {
       colors: {
         ...defaultColors,
@@ -13,7 +16,7 @@ module.exports = {
           'pri-100': '#CFEBE4',
           'pri-500': '#23A485',
           'sec-500': '#E98583',
-          'tet-500': '#F7D39A',
+          'tri-500': '#F7D39A',
         }
       }
     },
