@@ -8,7 +8,12 @@
             "
             class="text-sm py-2"
         >
-            <i :class="menu.icon" class="fa-solid fa-xl pt-1 mb-1"></i>
+            <img
+                :src="`/icons/svg/${menu.icon}.svg`"
+                :alt="`icon-${menu.icon}`"
+                :class="{'brightness-0 invert': $route.name === menu.routeName}"
+                class="mx-auto mb-1"
+            >
             <div>{{ menu.label }}</div>
         </button>
     </div>
@@ -19,17 +24,17 @@ export default {
         return {
             menus: [
                 {
-                    icon: 'fa-house',
+                    icon: 'home',
                     label: 'หน้าหลัก',
                     routeName: 'home'
                 },
                 {
-                    icon: 'fa-clipboard',
+                    icon: 'Food record',
                     label: 'บันทึกอาหาร',
                     routeName: 'dietary'
                 },
                 {
-                    icon: 'fa-circle-user',
+                    icon: 'Username',
                     label: 'ฉัน',
                     routeName: 'profile'
                 },
