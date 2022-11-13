@@ -28,4 +28,12 @@ const router = createRouter({
     ]
 })
 
+router.beforeEach((to, from, next) => {
+    // Redirect to home if device ID already defined
+    const deviceId = localStorage.getItem('deviceId')
+    if (!deviceId && to.name !== 'register') next({ name: 'register' })
+    else if (deviceId && to.name === 'register') next({ name: 'home' })
+    else next()
+})
+
 export default router

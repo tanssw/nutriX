@@ -12,7 +12,7 @@ export default function LandingScreen({ navigation }) {
       <View style={style.buttonContainer}>
         <TouchableOpacity
           style={style.button}
-          onPress={() => navigation.navigate('Main', { uri: 'http://192.168.2.1:8080/' })}
+          onPress={() => navigation.navigate('Main', { uri: 'http://172.20.10.3:8080/#/' })}
         >
           <Text style={style.buttonText}>Let's start !!</Text>
         </TouchableOpacity>
