@@ -134,11 +134,10 @@ export default {
             // Validate data
             if (body.userInfo.age < 0) return this.error = 'วัน/เดือน/ปีเกิด ไม่ถูกต้อง'
             // Reformatted data
-            this.userInfo.age = Math.floor(body.userInfo.age)
+            body.userInfo.age = Math.floor(body.userInfo.age)
             // Try send the request
             try {
-                // TODO: Remove comment
-                // const result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo`, JSON.stringify(body), config)
+                const result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo`, JSON.stringify(body), config)
                 this.$router.push({name: 'home'})
             } catch (error) {
                 this.error = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"

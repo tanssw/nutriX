@@ -7,7 +7,9 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      'body': ['Sukhumvit', 'sans']
+      'body': ['Sukhumvit', 'sans'],
+      'medium': ['Sukhumvit-Medium', 'sans'],
+      'bold': ['Sukhumvit-Bold', 'sans']
     },
     extend: {
       colors: {

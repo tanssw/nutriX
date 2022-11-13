@@ -6,3 +6,11 @@
     font-family: 'Sukhumvit';
     src: url('/fonts/SukhumvitSet-Text.ttf')
 }
+@font-face {
+    font-family: 'Sukhumvit-Medium';
+    src: url('/fonts/SukhumvitSet-Medium.ttf')
+}
+@font-face {
+    font-family: 'Sukhumvit-Bold';
+    src: url('/fonts/SukhumvitSet-Bold.ttf')
+}
