@@ -30,6 +30,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { getUserData } from '../../utils/userData'
 
 export default {
     data() {
@@ -56,10 +57,11 @@ export default {
         }
     },
     async created() {
+        const localUserData = localStorage.getItem('userData')
+        if (localUserData) return this.userData = JSON.parse(localUserData)
         // Get user data from API
         try {
-            const result = await axios.get(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo`)
-            const user = result.data.userInfo.find(user => user.deviceId === localStorage.getItem('deviceId'))
+            const user = await getUserData()
             this.userData = user
         } catch (error) {
             console.error(error)

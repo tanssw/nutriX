@@ -107,9 +107,6 @@ export default {
         formatDate(rawDate) {
             return dayjs(rawDate).format('DD/MM/YYYY')
         },
-        validate() {
-
-        },
         async submit() {
             // Clear error & Validate
             this.error = undefined
@@ -138,6 +135,7 @@ export default {
             // Try send the request
             try {
                 const result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo`, JSON.stringify(body), config)
+                localStorage.setItem('userInfo', JSON.stringify(body.userInfo))
                 this.$router.push({name: 'home'})
             } catch (error) {
                 this.error = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
