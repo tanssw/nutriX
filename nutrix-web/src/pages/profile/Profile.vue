@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white h-min-screen rounded-3xl p-6">
+    <div class="bg-white min-h-screen rounded-3xl p-6">
         <div class="text-center text-2xl text-pri-500 font-bold mb-6">ข้อมูลส่วนตัว</div>
         <div class="m-6">
             <div class="relative w-28 h-28 rounded-full bg-pri-100 mx-auto mb-6">
@@ -18,8 +18,8 @@
             >
                 <img :src="`/icons/svg/${field.icon}.svg`" :alt="`${field.icon} Icon`" class="mr-3">
                 <template v-if="editMode">
-                    <div v-if="field.type === 'date'" class="relative">
-                        <label @click="openDatePicker(`date-input-${key}`)" :for="`date-input-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 w-full">
+                    <div v-if="field.type === 'date'" class="relative ml-1 w-full">
+                        <label @click="openDatePicker(`date-input-${key}`)" :for="`date-input-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
                             {{ field.value ? formatDate(field.value) : field.placeholder }}
                         </label>
                         <input
@@ -30,6 +30,22 @@
                             class="absolute left-0 w-0 outline-none -z-10"
                         >
                     </div>
+                    <div v-else-if="field.type === 'dropdown'" class="relative ml-1 w-full">
+                        <label @click="openDropdown(`dropdown-${key}`)" :for="`dropdown-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
+                            <div class="flex items-center justify-between">
+                                {{ field.value }}
+                                <img src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
+                            </div>
+                        </label>
+                        <select
+                            :id="`dropdown-${key}`"
+                            class="absolute left-0 w-0 outline-none -z-10"
+                            v-model="field.value"
+                        >
+                            <option value="" selected disabled>{{ field.placeholder }}</option>
+                            <option v-for="(option, oIndex) in field.options" :key="`sex-opt${oIndex}`" :value="option">{{ option }}</option>
+                        </select>
+                    </div>
                     <input
                         v-else
                         v-model="field.value"
@@ -38,6 +54,7 @@
                         class="w-full outline-none"
                     >
                 </template>
+                <div v-else-if="field.type === 'date'">{{ formatDate(field.value) }}</div>
                 <div v-else>{{ field.value }}</div>
             </div>
             <div class="mt-6">
@@ -55,7 +72,10 @@
 </template>
 <script>
 import dayjs from 'dayjs'
-import { getUserData } from '../../utils/userData'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+dayjs.extend(customParseFormat)
+
+import { getUserInfo } from '../../utils/userInfo'
 
 export default {
     data() {
@@ -75,7 +95,8 @@ export default {
                 },
                 sex: {
                     value: '',
-                    type: 'text',
+                    type: 'dropdown',
+                    options: ['ชาย', 'หญิง'],
                     placeholder: 'เพศ',
                     icon: 'Sex'
                 },
@@ -93,7 +114,13 @@ export default {
                 },
                 physicalActivity: {
                     value: '',
-                    type: 'text',
+                    type: 'dropdown',
+                    options: [
+                        'การทำงานมีอิริยบท นอนหรือนั่งเป็นส่วนใหญ่',
+                        'การทำงานมีอิริยบท นั่งเป็นส่วนใหญ่ และมีการเดินเป็นส่วนน้อย',
+                        'การทำงานมีอิริยบท เดินเป็นส่วนใหญ่และมีการออกแรงเล็กน้อย ทำงานโดยใช้เครื่องจักรหรือเครื่องทุ่นแรง',
+                        'การทำงานมีการใช้เเรงค่อนข้างมาก เช่น การยกของหนักหรือทำงานโดยไม่มีเครื่องทุ่นแรง',
+                    ],
                     placeholder: 'กิจกรรมทางกาย',
                     icon: 'Exercise'
                 },
@@ -110,9 +137,16 @@ export default {
     async created() {
         this.editMode = this.$route.query.mode === 'edit'
         let userData = localStorage.getItem('userData')
-        if (!userData) userData = await getUserData()
+        if (!userData) {
+            userData = await getUserInfo()
+            localStorage.setItem('userData', JSON.stringify(userData))
+        } else {
+            userData = JSON.parse(userData)
+        }
         Object.keys(this.profile).forEach(key => {
-            this.profile[key].value = JSON.parse(userData)[key]
+            let value = userData[key]
+            if (key === 'birthday') value = dayjs(value, 'DD/MM/YYYY').format('YYYY-MM-DD')
+            this.profile[key].value = value
         })
     },
     methods: {
@@ -126,7 +160,11 @@ export default {
         },
         openDatePicker(key) {
             const element = document.getElementById(key)
-            element.showPicker()
+            element.dispatchEvent(new MouseEvent('mousedown'))
+        },
+        openDropdown(key) {
+            const element = document.getElementById(key)
+            element.click()
         },
         formatDate(rawDate) {
             return dayjs(rawDate).format('DD/MM/YYYY')

@@ -7,8 +7,8 @@
             <div class="w-10">
                 <img :src="`/icons/svg/${field.icon}.svg`" :alt="`icon-${field.icon}`">
             </div>
-            <div v-if="field.type === 'date'" class="relative">
-                <label @click="openDatePicker(`date-input-${key}`)" :for="`date-input-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 w-full">
+            <div v-if="field.type === 'date'" class="relative ml-1 w-full">
+                <label @click="openDatePicker(`date-input-${key}`)" :for="`date-input-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
                     {{ field.value ? formatDate(field.value) : field.placeholder }}
                 </label>
                 <input
@@ -18,6 +18,22 @@
                     :placeholder="field.placeholder"
                     class="absolute left-0 w-0 outline-none -z-10"
                 >
+            </div>
+            <div v-else-if="field.type === 'dropdown'" class="relative ml-1 w-full">
+                <label @click="openDropdown(`dropdown-${key}`)" :for="`dropdown-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
+                    <div class="flex items-center justify-between">
+                        {{ field.value ? field.value : field.placeholder }}
+                        <img src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
+                    </div>
+                </label>
+                <select
+                    :id="`dropdown-${key}`"
+                    class="absolute left-0 w-0 outline-none -z-10"
+                    v-model="field.value"
+                >
+                    <option value="" selected disabled>{{ field.placeholder }}</option>
+                    <option v-for="(option, oIndex) in field.options" :key="`sex-opt${oIndex}`" :value="option">{{ option }}</option>
+                </select>
             </div>
             <input
                 v-else
@@ -58,7 +74,8 @@ export default {
                 },
                 sex: {
                     value: '',
-                    type: 'text',
+                    type: 'dropdown',
+                    options: ['ชาย', 'หญิง'],
                     placeholder: 'เพศ',
                     icon: 'Sex'
                 },
@@ -76,7 +93,13 @@ export default {
                 },
                 physicalActivity: {
                     value: '',
-                    type: 'text',
+                    type: 'dropdown',
+                    options: [
+                        'การทำงานมีอิริยบท นอนหรือนั่งเป็นส่วนใหญ่',
+                        'การทำงานมีอิริยบท นั่งเป็นส่วนใหญ่ และมีการเดินเป็นส่วนน้อย',
+                        'การทำงานมีอิริยบท เดินเป็นส่วนใหญ่และมีการออกแรงเล็กน้อย ทำงานโดยใช้เครื่องจักรหรือเครื่องทุ่นแรง',
+                        'การทำงานมีการใช้เเรงค่อนข้างมาก เช่น การยกของหนักหรือทำงานโดยไม่มีเครื่องทุ่นแรง',
+                    ],
                     placeholder: 'กิจกรรมทางกาย',
                     icon: 'Exercise'
                 },
@@ -102,7 +125,11 @@ export default {
         },
         openDatePicker(key) {
             const element = document.getElementById(key)
-            element.showPicker()
+            element.dispatchEvent(new MouseEvent('mousedown'))
+        },
+        openDropdown(key) {
+            const element = document.getElementById(key)
+            element.click()
         },
         formatDate(rawDate) {
             return dayjs(rawDate).format('DD/MM/YYYY')

@@ -30,7 +30,7 @@
 </template>
 <script>
 import axios from 'axios'
-import { getUserData } from '../../utils/userData'
+import { getUserInfo } from '../../utils/userInfo'
 
 export default {
     data() {
@@ -61,7 +61,8 @@ export default {
         if (localUserData) return this.userData = JSON.parse(localUserData)
         // Get user data from API
         try {
-            const user = await getUserData()
+            const user = await getUserInfo()
+            localStorage.setItem('userData', JSON.stringify(user))
             this.userData = user
         } catch (error) {
             console.error(error)
