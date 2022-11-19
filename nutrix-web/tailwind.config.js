@@ -24,4 +24,7 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    ...[Array(12).keys()].map(n => `col-span-${n + 1}`),
+  ]
 }

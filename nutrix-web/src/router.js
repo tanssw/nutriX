@@ -6,6 +6,7 @@ import NavbarTemplate from './templates/Navbar.vue'
 import Home from './pages/home/Home.vue'
 import Register from './pages/register/Register.vue'
 import Profile from './pages/profile/Profile.vue'
+import Record from './pages/record/Record.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -15,7 +16,7 @@ const router = createRouter({
             component: NavbarTemplate,
             children: [
                 { path: '', name: 'home', component: Home },
-                { path: 'dietary', name: 'dietary', component: Home },
+                { path: 'record', name: 'record', component: Record },
                 { path: 'profile', name: 'profile', component: Profile },
             ]
         },

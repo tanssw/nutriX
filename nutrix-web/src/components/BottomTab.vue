@@ -31,7 +31,7 @@ export default {
                 {
                     icon: 'Food record',
                     label: 'บันทึกอาหาร',
-                    routeName: 'dietary'
+                    routeName: 'record'
                 },
                 {
                     icon: 'Username',

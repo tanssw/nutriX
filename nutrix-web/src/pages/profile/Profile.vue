@@ -58,7 +58,7 @@
                 <div v-else>{{ field.value }}</div>
             </div>
             <div class="mt-6">
-                <button v-if="editMode" @click="toggleEdit(false)" class="relative rounded-full px-2 h-10 border border-pri-500 bg-pri-500 w-full">
+                <button v-if="editMode" @click="submitEditProfile()" class="relative rounded-full px-2 h-10 border border-pri-500 bg-pri-500 w-full">
                     <img src="/icons/svg/Right.svg" alt="Green Edit Pen Icon" class="absolute inset-y-0 left-0 my-auto w-10 h-10 brightness-0 invert rotate-180">
                     <div class="text-white font-bold">บันทึก</div>
                 </button>
@@ -71,6 +71,7 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
@@ -80,6 +81,7 @@ import { getUserInfo } from '../../utils/userInfo'
 export default {
     data() {
         return {
+            userObjectId: null,
             profile: {
                 userName: {
                     value: '',
@@ -131,11 +133,14 @@ export default {
                     icon: 'Email'
                 }
             },
-            editMode: false
+        }
+    },
+    computed: {
+        editMode() {
+            return this.$route.query.mode === 'edit'
         }
     },
     async created() {
-        this.editMode = this.$route.query.mode === 'edit'
         let userData = localStorage.getItem('userData')
         if (!userData) {
             userData = await getUserInfo()
@@ -148,10 +153,11 @@ export default {
             if (key === 'birthday') value = dayjs(value, 'DD/MM/YYYY').format('YYYY-MM-DD')
             this.profile[key].value = value
         })
+        // Set User Object Id
+        this.userObjectId = userData.id
     },
     methods: {
         toggleEdit(state) {
-            this.editMode = state
             let mode = state ? 'edit' : 'view'
             this.$router.push({name: 'profile', query: {mode}})
         },
@@ -169,6 +175,36 @@ export default {
         formatDate(rawDate) {
             return dayjs(rawDate).format('DD/MM/YYYY')
         },
+        async submitEditProfile() {
+            // Prepare data
+            const config = { headers: { 'Content-Type': 'application/json' } }
+            const body = { userInfo: {} }
+            for (const [key, data] of Object.entries(this.profile)) {
+                let formattedData
+                switch (data.type) {
+                    case 'date':
+                        formattedData = this.formatDate(data.value)
+                        break
+                    default:
+                        formattedData = data.value
+                }
+                body.userInfo[key] = formattedData
+            }
+            // Calculate other datas
+            body.userInfo.age = dayjs().diff(dayjs(this.profile.birthday.value), 'year', true)
+            // Validate data
+            if (body.userInfo.age < 0) return this.error = 'วัน/เดือน/ปีเกิด ไม่ถูกต้อง'
+            // Reformatted data
+            body.userInfo.age = Math.floor(body.userInfo.age)
+            // Try send the request
+            try {
+                const result = await axios.put(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo/${this.userObjectId}`, JSON.stringify(body), config)
+                localStorage.setItem('userInfo', JSON.stringify(body.userInfo))
+                this.$router.push({name: 'profile', query: {mode: 'view'}})
+            } catch (error) {
+                console.error(error)
+            }
+        }
     }
 }
 </script>
