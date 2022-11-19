@@ -20,10 +20,10 @@
                         <div>อาหาร {{ record.amount }} {{ record.unitDependOnFood }}</div>
                     </div>
                     <div class="flex items-center justify-end ml-auto">
-                        <button @click="editRecord()" class="ml-2">
+                        <button @click="editRecord()" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">
                             <img src="/icons/png/Edit_rec.png" class="w-8" alt="Edit Record Icon" />
                         </button>
-                        <button @click="deleteRecord()" class="ml-2">
+                        <button @click="deleteRecord(record.id)" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">
                             <img src="/icons/png/delete_rec.png" class="w-8" alt="Delete Record Icon" />
                         </button>
                     </div>
@@ -46,12 +46,18 @@ export default {
     },
     data() {
         return {
-            records: []
+            records: [],
+            isLoading: false
         }
     },
     computed: {
         mode() {
             return this.$route.query.mode
+        }
+    },
+    watch: {
+        mode() {
+            this.getRecords()
         }
     },
     created() {
@@ -73,7 +79,17 @@ export default {
             this.records = records
         },
         editRecord() {},
-        deleteRecord() {},
+        async deleteRecord(id) {
+            this.isLoading = true
+            try {
+                const result = await axios.delete(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec/${id}`)
+                this.records = this.records.filter(record => record.id != id)
+                localStorage.setItem('foodRecords', JSON.stringify(this.records))
+                this.isLoading = false
+            } catch (error) {
+                alert('เกิดข้อผิดพลาด กรุณาลองใหม่ภายหลัง')
+            }
+        },
         openAddingDialog() {
 
         }

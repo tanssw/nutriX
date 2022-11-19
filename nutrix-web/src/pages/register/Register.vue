@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6">
+    <div class="p-6 bg-white">
         <img src="/icons/logo/nutrix-green.svg" alt="NutriX Logo Green">
         <img src="/icons/png/SignUpform_icon.png" alt="Sign-up Vector Image" class="px-6 py-12">
         <div v-if="error" class="my-3 text-rose-600 text-sm text-center">{{ error }}</div>
@@ -35,6 +35,14 @@
                     <option v-for="(option, oIndex) in field.options" :key="`sex-opt${oIndex}`" :value="option">{{ option }}</option>
                 </select>
             </div>
+            <input
+                v-else-if="field.type === 'number'"
+                v-model="field.value"
+                type="number"
+                inputmode="decimal"
+                :placeholder="field.placeholder"
+                class="w-full outline-none"
+            >
             <input
                 v-else
                 v-model="field.value"

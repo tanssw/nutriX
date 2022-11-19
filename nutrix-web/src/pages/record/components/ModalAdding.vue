@@ -5,8 +5,8 @@
             <dietary-form ref="dietaryForm" />
             <div v-if="errorMessage" class="text-rose-600 my-6 text-center text-sm">{{errorMessage}}</div>
             <div class="mt-auto">
-                <button @click="cancel()" class="bg-sec-500 rounded-full p-3 text-white w-full mb-3">ยกเลิก</button>
-                <button @click="submit()" class="bg-pri-500 rounded-full p-3 text-white w-full">บันทึก</button>
+                <button @click="cancel()" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="bg-sec-500 rounded-full p-3 text-white w-full mb-3">ยกเลิก</button>
+                <button @click="submit()" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="bg-pri-500 rounded-full p-3 text-white w-full">บันทึก</button>
             </div>
         </div>
     </div>
@@ -20,7 +20,8 @@ export default {
     },
     data() {
         return {
-            errorMessage: ''
+            errorMessage: '',
+            isLoading: false
         }
     },
     computed: {
@@ -33,6 +34,7 @@ export default {
             this.$router.push({ query: { mode: undefined } })
         },
         async submit() {
+            this.isLoading = true
             this.errorMessage = ''
             try {
                 // Prepare data    
@@ -44,16 +46,21 @@ export default {
                 }
                 if (Object.values(data).some(field => field === '')) return this.errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน'
                 // Send add new row
+                data.deviceId = localStorage.getItem('deviceId')
                 data = { userRec: data }
                 const config = { headers: { 'Content-Type': 'application/json' } }
-                await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec`, JSON.stringify(data), config)
-                // Update local storage   
+                const result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec`, JSON.stringify(data), config)
+                // Update local storage
+                console.log(result)
                 let foodRecords = localStorage.getItem('foodRecords')
                 foodRecords = foodRecords ? JSON.parse(foodRecords) : []
-                foodRecords.push(data)
+                foodRecords.push(result.data.userRec)
                 localStorage.setItem('foodRecords', JSON.stringify(foodRecords))
+                // Close modal
+                this.isLoading = false
+                this.$router.push({name: 'record', query: { mode: undefined }})
             } catch (error) {
-                console.error(error)
+                this.errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่ในภายหลัง'
             }
 
         }
