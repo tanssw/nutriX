@@ -8,7 +8,7 @@
                     <div>เพศ: {{ userData.sex }}</div>
                     <div>อายุ: {{ userData.age }} ปี</div>
                 </div>
-                <button class="ml-auto">
+                <button @click="navigateProfile()" class="ml-auto">
                     <img src="/icons/svg/Right.svg" alt="Chevron Right Button" class="w-8">
                 </button>
             </div>
@@ -29,7 +29,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
 import { getUserInfo } from '../../utils/userInfo'
 
 export default {
@@ -67,7 +66,11 @@ export default {
         } catch (error) {
             console.error(error)
         }
-
+    },
+    methods: {
+        navigateProfile() {
+            this.$router.push({ name: 'profile' })
+        }
     }
 }
 </script>

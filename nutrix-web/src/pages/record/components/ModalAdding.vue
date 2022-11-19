@@ -1,6 +1,6 @@
 <template>
     <div v-if="isOpen" class="fixed top-0 h-screen w-screen z-20 p-6 backdrop-brightness-50">
-        <div class="bg-white h-full p-6 rounded-3xl flex flex-col">
+        <div class="bg-white h-full p-6 rounded-3xl flex flex-col overflow-y-scroll">
             <div class="text-2xl font-bold text-pri-500 text-center mb-6">เพิ่มอาหาร</div>
             <dietary-form ref="dietaryForm" />
             <div v-if="errorMessage" class="text-rose-600 my-6 text-center text-sm">{{errorMessage}}</div>
@@ -26,7 +26,10 @@ export default {
     },
     computed: {
         isOpen() {
-            return this.$route.query.mode === 'add'
+            return ['add', 'edit'].includes(this.$route.query.mode)
+        },
+        isEditing() {
+            return this.$route.query.mode === 'edit'
         }
     },
     methods: {
@@ -58,7 +61,8 @@ export default {
                 localStorage.setItem('foodRecords', JSON.stringify(foodRecords))
                 // Close modal
                 this.isLoading = false
-                this.$router.push({name: 'record', query: { mode: undefined }})
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+                this.$router.push({name: 'record', query: { mode: undefined, id: undefined }})
             } catch (error) {
                 this.errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่ในภายหลัง'
             }

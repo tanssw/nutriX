@@ -174,7 +174,7 @@ export default {
                     width: 'col-span-7'
                 }
             },
-            foodDb: []
+            foodDb: [],
         }
     },
     computed: {
@@ -186,12 +186,27 @@ export default {
         },
         unitDependOnFoodOptions() {
             return this.updateDynamicOptions('unitDependOnFood', 'ingredientFood', 'amountUnit', 'foodName')
-        }
+        },
+        isEditing() {
+            return this.$route.query.mode === 'edit'
+        },
     },
     async created() {
-      await this.getFoodDatabase()
+        if (this.isEditing) this.setFormValue()
+        await this.getFoodDatabase()
     },
     methods: {
+        setFormValue() {
+            let id = this.$route.query.id
+            let records = localStorage.getItem('foodRecords')
+            if (!records) return
+            records = JSON.parse(records)
+            let record = records.find(record => record.id == id)
+            if (!record) return
+            for (const [key, value] of Object.entries(this.form)) {
+                this.form[key].value = record[key]
+            }
+        },
         async getFoodDatabase() {
             // Get all food detail (Only once a day)
             let lastUpdate = localStorage.getItem('foodDb_lastUpdate')

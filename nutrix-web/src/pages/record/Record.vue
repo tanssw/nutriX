@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="{'overflow-y-hidden': isOpeningModal}">
         <div class="bg-white rounded-t-3xl">
             <div class="p-6">
                 <div class="text-2xl font-bold text-center text-pri-500">บันทึกอาหารของคุณ</div>
@@ -20,10 +20,10 @@
                         <div>อาหาร {{ record.amount }} {{ record.unitDependOnFood }}</div>
                     </div>
                     <div class="flex items-center justify-end ml-auto">
-                        <button @click="editRecord()" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">
+                        <button @click="editRecord(record.id)" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">
                             <img src="/icons/png/Edit_rec.png" class="w-8" alt="Edit Record Icon" />
                         </button>
-                        <button @click="deleteRecord(record.id)" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">
+                        <button @click="confirmDelete(record.id)" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">
                             <img src="/icons/png/delete_rec.png" class="w-8" alt="Delete Record Icon" />
                         </button>
                     </div>
@@ -53,6 +53,9 @@ export default {
     computed: {
         mode() {
             return this.$route.query.mode
+        },
+        isOpeningModal() {
+            return ['add', 'edit'].includes(this.mode) 
         }
     },
     watch: {
@@ -78,7 +81,13 @@ export default {
             } 
             this.records = records
         },
-        editRecord() {},
+        editRecord(id) {
+            this.$router.push({ name: 'record', query: { mode: 'edit', id: id } })
+        },
+        confirmDelete(id) {
+            const confirmAlert = confirm('รายการบันทึกอาหารนี้จะถูกลบ')
+            if (confirmAlert) return this.deleteRecord(id)
+        },
         async deleteRecord(id) {
             this.isLoading = true
             try {

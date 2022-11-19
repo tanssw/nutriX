@@ -4,7 +4,8 @@
             v-for="(menu, index) in menus" :key="index"
             @click="navigateTo(menu.routeName)"
             :class="
-                $route.name === menu.routeName ? 'bg-pri-500 text-white shadow-inner' : 'bg-pri-100 text-pri-500'
+                $route.name === menu.routeName ? 'bg-pri-500 text-white shadow-inner' :
+                $route.name === 'record' ? 'bg-white text-pri-500' : 'bg-pri-100 text-pri-500'
             "
             class="text-sm py-2"
         >
