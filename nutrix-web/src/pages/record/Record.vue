@@ -39,7 +39,10 @@
 </template>
 <script>
 import axios from 'axios'
+import { getStorage, ref, deleteObject } from 'firebase/storage'
+
 import ModalAdding from './components/ModalAdding.vue'
+
 export default {
     components: {
         ModalAdding
@@ -91,6 +94,12 @@ export default {
         async deleteRecord(id) {
             this.isLoading = true
             try {
+                const record = this.records.find(record => record.id == id)
+                // Remove image
+                const storage = getStorage()
+                const foodImageRef = ref(storage, record.foodImagePath)
+                await deleteObject(foodImageRef)
+                // Remove row
                 const result = await axios.delete(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec/${id}`)
                 this.records = this.records.filter(record => record.id != id)
                 localStorage.setItem('foodRecords', JSON.stringify(this.records))

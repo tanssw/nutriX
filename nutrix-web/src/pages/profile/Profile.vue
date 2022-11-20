@@ -2,10 +2,21 @@
     <div class="bg-white min-h-screen rounded-3xl p-6">
         <div class="text-center text-2xl text-pri-500 font-bold mb-6">ข้อมูลส่วนตัว</div>
         <div class="m-6">
-            <div class="relative w-28 h-28 rounded-full bg-pri-100 mx-auto mb-6">
-                <button v-if="editMode" @click="chooseImage()" class="absolute bottom-0 right-0 bg-white w-10 h-10 rounded-full">
-                    <img src="/icons/svg/Edit.svg" alt="White Edit Pen Icon" class="w-10 h-10 -mr-1">
-                </button>
+            <div
+                class="relative w-28 h-28 rounded-full bg-pri-100 mx-auto mb-6 flex items-center justify-center">
+                <img :src="previewProfilePicture ? previewProfilePicture : profilePicture" class="overflow-hidden rounded-full" />
+                <template v-if="editMode">
+                    <label for="profile-image" class="absolute bottom-0 right-0 bg-white w-10 h-10 rounded-full">
+                        <img src="/icons/svg/Edit.svg" alt="White Edit Pen Icon" class="w-10 h-10 -mr-1">
+                    </label>
+                    <input
+                        id="profile-image"
+                        type="file"
+                        accept="image/*"
+                        @change="uploadProfileImage($event)"
+                        class="absolute left-0 w-0 outline-none -z-10"
+                    />
+                </template>
             </div>
             <div
                 v-for="(field, key) in profile"
@@ -72,6 +83,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 dayjs.extend(customParseFormat)
@@ -133,6 +145,9 @@ export default {
                     icon: 'Email'
                 }
             },
+            profilePicture: '',
+            newProfilePicture: '',
+            previewProfilePicture: '',
         }
     },
     computed: {
@@ -155,6 +170,8 @@ export default {
         })
         // Set User Object Id
         this.userObjectId = userData.id
+        // Set profile
+        this.profilePicture = localStorage.getItem('profilePicture')
     },
     methods: {
         toggleEdit(state) {
@@ -175,7 +192,13 @@ export default {
         formatDate(rawDate) {
             return dayjs(rawDate).format('DD/MM/YYYY')
         },
+        uploadProfileImage(event) {
+            this.newProfilePicture = event.target.files[0]
+            // Preview profile image
+            this.previewProfilePicture = URL.createObjectURL(this.newProfilePicture)
+        },
         async submitEditProfile() {
+            const DEVICE_ID = localStorage.getItem('deviceId')
             // Prepare data
             const config = { headers: { 'Content-Type': 'application/json' } }
             const body = { userInfo: {} }
@@ -196,8 +219,25 @@ export default {
             if (body.userInfo.age < 0) return this.error = 'วัน/เดือน/ปีเกิด ไม่ถูกต้อง'
             // Reformatted data
             body.userInfo.age = Math.floor(body.userInfo.age)
-            // Try send the request
             try {
+                // Upload profile image
+                if (this.newProfilePicture) {
+                    const storage = getStorage()
+                    let storageRef
+                    if (this.profilePicture) {
+                        let profilePicturePath = localStorage.getItem('profilePicturePath')
+                        storageRef = ref(storage, profilePicturePath)
+                        await deleteObject(storageRef)
+                    }
+                    let storagePath = `images/${DEVICE_ID}/profile/${dayjs().unix()}`
+                    storageRef = ref(storage, storagePath)
+                    const firebaseResult = await uploadBytes(storageRef, this.newProfilePicture)
+                    const imageURL = await getDownloadURL(firebaseResult.ref)
+                    this.profilePicture = imageURL
+                    localStorage.setItem('profilePicture', imageURL)
+                    localStorage.setItem('profilePicturePath', storagePath)
+                }
+                // Try send the request
                 const result = await axios.put(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo/${this.userObjectId}`, JSON.stringify(body), config)
                 localStorage.setItem('userInfo', JSON.stringify(body.userInfo))
                 this.$router.push({name: 'profile', query: {mode: 'view'}})

@@ -9,6 +9,11 @@ import '@fortawesome/fontawesome-free/js/fontawesome'
 // Custom
 import './style.css'
 
+// Firebase
+import { initializeApp } from 'firebase/app'
+import firebaseConfig from './config/firebase'
+initializeApp(firebaseConfig)
+
 const app = createApp(App)
 app.use(router)
 app.mount('#app')

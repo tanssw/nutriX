@@ -75,9 +75,15 @@
                     >
                 </div>
                 <div v-else-if="field.type === 'image'" class="relative w-full">
-                    <label :for="`image-${key}`" class="flex items-center justify-center">
-                        <img :src="`/icons/svg/camera.svg`" :alt="`Camera Icon`" class="w-6 mr-3" />
-                        <div class="text-pri-500">รูปภาพ</div>
+                    <label :for="`image-${key}`">
+                        <div v-if="field.value" class="items-center grid grid-cols-3 gap-6">
+                            <div class="truncate col-span-2">{{ field.value.name ? field.value.name : field.value }}</div>
+                            <div class="border border-pri-500 py-1 px-3 text-xs rounded-lg text-pri-500 text-center">อัพโหลดใหม่</div>
+                        </div>
+                        <div v-else class="flex items-center justify-center">
+                            <img :src="`/icons/svg/camera.svg`" :alt="`Camera Icon`" class="w-6 mr-3" />
+                            <div class="text-pri-500">รูปภาพ</div>
+                        </div>
                     </label>
                     <input
                         :id="`image-${key}`"
@@ -235,7 +241,6 @@ export default {
         },
         uploadFile(event, key) {
             this.form[key].value = event.target.files[0]
-            console.log(this.form[key].value)
         }
     }
 }

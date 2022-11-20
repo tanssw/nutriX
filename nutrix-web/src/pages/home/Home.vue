@@ -2,7 +2,9 @@
     <div>
         <div class="p-4 m-6 mt-0 bg-white rounded-3xl">
             <div class="flex items-center border-b-4 border-pri-100 pb-4">
-                <div class="w-20 h-20 bg-pri-100 rounded-full"></div>
+                <div class="relative w-20 h-20 bg-pri-100 rounded-full">
+                    <img v-if="profilePicture" :src="profilePicture" class="overflow-hidden rounded-full">
+                </div>
                 <div class="text-pri-500 text-sm ml-6">
                     <div class="font-bold mb-1 truncate">{{ userData.userName }}</div>
                     <div>เพศ: {{ userData.sex }}</div>
@@ -40,7 +42,8 @@ export default {
                 age: '',
                 weightKg: 0,
                 heightCm: 0,
-            }
+            },
+            profilePicture: localStorage.getItem('profilePicture'),
         }
     },
     computed: {

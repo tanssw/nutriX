@@ -13,7 +13,11 @@
 </template>
 <script>
 import axios from 'axios'
+import dayjs from 'dayjs'
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
+
 import DietaryForm from './DietaryForm.vue'
+
 export default {
     components: {
         DietaryForm
@@ -21,7 +25,7 @@ export default {
     data() {
         return {
             errorMessage: '',
-            isLoading: false
+            isLoading: false,
         }
     },
     computed: {
@@ -35,36 +39,69 @@ export default {
     methods: {
         cancel() {
             this.$router.push({ query: { mode: undefined } })
+            this.errorMessage = ''
         },
         async submit() {
             this.isLoading = true
             this.errorMessage = ''
             try {
+                const DEVICE_ID = localStorage.getItem('deviceId')
                 // Prepare data    
                 const dietaryForm = this.$refs.dietaryForm
-                let form = JSON.parse(JSON.stringify(dietaryForm.form))
+                let form = dietaryForm.form
                 let data = {}
                 for (const [key, field] of Object.entries(form)) {
-                    if (key !== 'foodImage') data[key] = field.value
+                    data[key] = field.value
                 }
                 if (Object.values(data).some(field => field === '')) return this.errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน'
+                // Upload image
+                let storagePath
+                const storage = getStorage()
+                if ((typeof data.foodImage) !== 'string') {
+                    // If new image is uploaded
+                    let storageRef
+                    if (this.isEditing) {
+                        let record = JSON.parse(localStorage.getItem('foodRecords')).find(record => record.id == this.$route.query.id)
+                        let foodImagePath = record.foodImagePath
+                        storageRef = ref(storage, foodImagePath)
+                        await deleteObject(storageRef)
+                    }
+                    storagePath = `images/${DEVICE_ID}/record/${dayjs().unix()}`
+                    storageRef = ref(storage, storagePath)
+                    const firebaseResult = await uploadBytes(storageRef, data.foodImage)
+                    const imageURL = await getDownloadURL(firebaseResult.ref)
+                    data.foodImage = imageURL
+                }
                 // Send add new row
-                data.deviceId = localStorage.getItem('deviceId')
+                data.deviceId = DEVICE_ID
                 data = { userRec: data }
                 const config = { headers: { 'Content-Type': 'application/json' } }
-                const result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec`, JSON.stringify(data), config)
+                let result
+                if (this.isEditing) {
+                    result = await axios.put(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec/${this.$route.query.id}`, JSON.stringify(data), config)
+                } else {
+                    result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec`, JSON.stringify(data), config)
+                }
                 // Update local storage
-                console.log(result)
                 let foodRecords = localStorage.getItem('foodRecords')
                 foodRecords = foodRecords ? JSON.parse(foodRecords) : []
-                foodRecords.push(result.data.userRec)
+                let resultUserRecord = result.data.userRec
+                if (storagePath) resultUserRecord.foodImagePath = storagePath
+                if (this.isEditing) {
+                    let others = foodRecords.filter(record => record.id != this.$route.query.id)
+                    foodRecords = [...others, result.data.userRec]
+                } else {
+                    foodRecords.push(result.data.userRec)
+                }
                 localStorage.setItem('foodRecords', JSON.stringify(foodRecords))
                 // Close modal
-                this.isLoading = false
-                window.scrollTo({ top: 0, behavior: 'smooth' })
                 this.$router.push({name: 'record', query: { mode: undefined, id: undefined }})
             } catch (error) {
-                this.errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่ในภายหลัง'
+                // this.errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่ในภายหลัง'
+                this.errorMessage = error
+            } finally {
+                this.isLoading = false
+                window.scrollTo({ top: 0, behavior: 'smooth' })
             }
 
         }
