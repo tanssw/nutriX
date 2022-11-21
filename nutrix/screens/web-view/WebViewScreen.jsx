@@ -9,6 +9,7 @@ export default function WebViewScreen({ route }) {
 
   const [isExternal, setIsExternal] = useState(false)
   const [isWhite, setIsWhite] = useState(false)
+  const [isGreen, setIsGreen] = useState(false)
 
   const onMessage = (payload) => {
     console.log(payload.nativeEvent.data)
@@ -19,6 +20,7 @@ export default function WebViewScreen({ route }) {
     console.log(url)
     setIsExternal(!url.includes('nutrix-bac97.web.app') && !url.includes('localhost'))
     setIsWhite(url.includes('#/record'))
+    setIsGreen(url.includes('?drawer=true'))
   }
 
   const goBackHomepage = () => {
@@ -30,7 +32,7 @@ export default function WebViewScreen({ route }) {
       <SafeAreaView style={styles.background} />
       <SafeAreaView style={[
         styles.container,
-        { backgroundColor: isWhite ? '#fff' : '#CFEBE4' }
+        { backgroundColor: isGreen ? '#23A485' : isWhite ? '#fff' : '#CFEBE4' }
       ]}>
         <WebView
           ref={webViewRef}

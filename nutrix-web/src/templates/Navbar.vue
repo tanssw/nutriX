@@ -9,8 +9,8 @@
     </div>
 </template>
 <script>
-import HeaderNav from '../components/HeaderNav.vue'
-import BottomTab from '../components/BottomTab.vue'
+import HeaderNav from './components/HeaderNav.vue'
+import BottomTab from './components/BottomTab.vue'
 import RecordNavigator from './components/RecordNavigator.vue'
 
 export default {

@@ -1,0 +1,17 @@
+[
+    {
+        "icon": "home",
+        "label": "หน้าหลัก",
+        "routeName": "home"
+    },
+    {
+        "icon": "Food record",
+        "label": "บันทึกอาหาร",
+        "routeName": "record"
+    },
+    {
+        "icon": "Username",
+        "label": "ฉัน",
+        "routeName": "profile"
+    }
+]

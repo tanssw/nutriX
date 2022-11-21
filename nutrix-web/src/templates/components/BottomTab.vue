@@ -20,26 +20,11 @@
     </div>
 </template>
 <script>
+import menuJSON from '../json/navigator.json'
 export default {
     data() {
         return {
-            menus: [
-                {
-                    icon: 'home',
-                    label: 'หน้าหลัก',
-                    routeName: 'home'
-                },
-                {
-                    icon: 'Food record',
-                    label: 'บันทึกอาหาร',
-                    routeName: 'record'
-                },
-                {
-                    icon: 'Username',
-                    label: 'ฉัน',
-                    routeName: 'profile'
-                },
-            ]
+            menus: menuJSON
         }
     },
     methods: {
