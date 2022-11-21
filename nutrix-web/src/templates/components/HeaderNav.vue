@@ -22,7 +22,7 @@ export default {
         async toggleDrawer(state) {
             this.drawer = state
             setTimeout(() => {
-                this.$router.replace({ query: { drawer: state ? state : undefined } })
+                this.$router.push({ query: { ...this.$route.query, drawer: state ? state : undefined } })
             }, 1)
         }
     }
