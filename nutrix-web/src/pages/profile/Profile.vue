@@ -4,7 +4,7 @@
         <div class="m-6">
             <div
                 class="relative w-28 h-28 rounded-full bg-pri-100 mx-auto mb-6 flex items-center justify-center">
-                <img :src="previewProfilePicture ? previewProfilePicture : profilePicture" class="overflow-hidden rounded-full" />
+                <img :src="previewProfilePicture ? previewProfilePicture : profilePicture" class="overflow-hidden rounded-full h-28" />
                 <template v-if="editMode">
                     <label for="profile-image" class="absolute bottom-0 right-0 bg-white w-10 h-10 rounded-full">
                         <img src="/icons/svg/Edit.svg" alt="White Edit Pen Icon" class="w-10 h-10 -mr-1">
