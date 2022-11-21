@@ -24,7 +24,7 @@
         <div class="bg-white h-full p-6 rounded-t-3xl text-center">
             <div class="text-2xl text-pri-500 font-bold">คู่มือการใช้งาน</div>
             <img src="/icons/png/Manual.png" alt="Manual Vector Image" class="w-2/3 my-12 mx-auto">
-            <button class="p-3 rounded-full bg-pri-500 text-white w-2/3">
+            <button @click="openPDF()" class="p-3 rounded-full bg-pri-500 text-white w-2/3">
                 คลิกเพื่อดูคู่มือ
             </button>
         </div>
@@ -73,6 +73,9 @@ export default {
     methods: {
         navigateProfile() {
             this.$router.push({ name: 'profile' })
+        },
+        openPDF() {
+            window.open('https://firebasestorage.googleapis.com/v0/b/nutrix-bac97.appspot.com/o/assets%2Fคู่มือการใช้%20NutriX.pdf?alt=media&token=2bb69bd6-d597-46d0-948a-ea49687026c6', '_blank')
         }
     }
 }
