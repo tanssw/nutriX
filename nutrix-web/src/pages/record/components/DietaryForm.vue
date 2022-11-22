@@ -5,51 +5,47 @@
                 v-for="(field, key) in form"
                 :key="`field-${key}`"
                 :class="field.width"
-                class="border border-pri-500 rounded-xl p-3"
+                class="border border-pri-500 rounded-xl px-3 py-2"
             >
-                <div v-if="field.type === 'dropdown'" class="relative ml-1 w-full">
-                    <label @click="openDropdown(`dropdown-${key}`)" :for="`dropdown-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
-                        <div class="flex items-center justify-between">
-                            {{ field.value ? field.value : field.placeholder }}
-                            <img src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
-                        </div>
-                    </label>
+                <div v-if="field.type === 'dropdown'" class="relative ml-1 w-full bg-white flex justify-end">
                     <select
                         :id="`dropdown-${key}`"
-                        class="absolute left-0 w-0 outline-none -z-10"
+                        :class="{ 'text-gray-400': !field.value }"
+                        class="absolute outline-none w-full bg-transparent z-10 pr-8 mt-0.5"
                         v-model="field.value"
-                    >
+                        >
                         <option value="" selected disabled>{{ field.placeholder }}</option>
-                        <option v-for="(option, oIndex) in field.options" :key="`opt-${key}-${oIndex}`" :value="option">{{ option }}</option>
+                        <option v-for="(option, oIndex) in field.options" :key="`sex-opt${oIndex}`" :value="option">{{ option }}</option>
                     </select>
+                    <img @click="openDropdown(`dropdown-${key}`)" src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
                 </div>
-                <div v-else-if="field.type === 'writableDropdown'" class="relative ml-1 w-full">
-                    <label :for="`dropdown-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
-                        <div class="flex items-center justify-between">
-                            <input
-                                type="text"
-                                v-model="field.value"
-                                :placeholder="field.placeholder"
-                                class="w-full mr-3 outline-none"
+                <div v-else-if="field.type === 'writableDropdown'" class="relative ml-1 w-full flex justify-end">
+                    <div class="absolute w-full z-10">
+                        <select
+                            :id="`dropdown-${key}`"
+                            class="outline-none w-full bg-transparent text-white pr-8 mt-0.5"
+                            v-model="field.value"
                             >
-                            <img src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
-                        </div>
-                    </label>
-                    <select
-                        :id="`dropdown-${key}`"
-                        class="absolute left-0 w-0 outline-none -z-10"
-                        v-model="field.value"
-                    >
-                        <option value="" selected disabled>{{ field.placeholder }}</option>
-                        <template v-if="field.dynamic">
-                            <option v-if="key === 'foodGroup'" v-for="(option, oIndex) in foodGroupOptions" :key="`opt-foodGroup-${oIndex}`" :value="option">{{ option }}</option>
-                            <option v-else-if="key === 'ingredientFood'" v-for="(option, oIndex) in ingredientFoodOptions" :key="`opt-ingredientFood-${oIndex}`" :value="option">{{ option }}</option>
-                            <option v-if="key === 'unitDependOnFood'" v-for="(option, oIndex) in unitDependOnFoodOptions" :key="`opt-unitDependOnFood-${oIndex}`" :value="option">{{ option }}</option>
-                        </template>
-                        <template v-else>
-                            <option v-for="(option, oIndex) in field.options" :key="`opt-${key}-${oIndex}`" :value="option">{{ option }}</option>
-                        </template>
-                    </select>
+                            <option value="" selected disabled>{{ field.placeholder }}</option>
+                            <template v-if="field.dynamic">
+                                <option v-if="key === 'foodGroup'" v-for="(option, oIndex) in foodGroupOptions" :key="`opt-foodGroup-${oIndex}`" :value="option">{{ option }}</option>
+                                <option v-else-if="key === 'ingredientFood'" v-for="(option, oIndex) in ingredientFoodOptions" :key="`opt-ingredientFood-${oIndex}`" :value="option">{{ option }}</option>
+                                <option v-if="key === 'unitDependOnFood'" v-for="(option, oIndex) in unitDependOnFoodOptions" :key="`opt-unitDependOnFood-${oIndex}`" :value="option">{{ option }}</option>
+                            </template>
+                            <template v-else>
+                                <option v-for="(option, oIndex) in field.options" :key="`opt-${key}-${oIndex}`" :value="option">{{ option }}</option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="absolute w-full pl-8 mr-8 z-20">
+                        <input
+                            type="text"
+                            v-model="field.value"
+                            :placeholder="field.placeholder"
+                            class="w-full outline-none bg-transparent"
+                        >
+                    </div>
+                    <img @click="openDropdown(`dropdown-${key}`)" src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
                 </div>
                 <div v-else-if="field.type === 'time'" class="relative ml-1 w-full">
                     <label @click="openTimeSelector(`time-${key}`)" :for="`time-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">

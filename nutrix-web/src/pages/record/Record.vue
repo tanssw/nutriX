@@ -9,7 +9,7 @@
             <div v-if="records.length">
                 <div
                     v-for="(record, index) in records" :key="`record-${index}`"
-                    class="flex flex-wrap items-center bg-white shadow-lg rounded-3xl p-4 mb-3"
+                    class="flex flex-nowrap items-center bg-white shadow-lg rounded-3xl p-4 mb-3"
                 >
                     <div class="w-16 h-16 flex items-center justify-center bg-pri-500 text-white rounded-full text-lg font-bold mr-4">
                         {{ record.day }}
@@ -17,7 +17,7 @@
                     <div class="text-pri-500 text-sm w-36">
                         <div class="font-bold mb-1">{{ record.meal }}</div>
                         <div class="truncate">{{ record.menu }}</div>
-                        <div>อาหาร {{ record.amount }} {{ record.unitDependOnFood }}</div>
+                        <div class="truncate">{{ record.ingredientFood }} {{ record.amount }} {{ record.unitDependOnFood }}</div>
                     </div>
                     <div class="flex items-center justify-end ml-auto">
                         <button @click="editRecord(record.id)" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="ml-2">

@@ -1,10 +1,10 @@
 <template>
     <div v-if="isOpen" class="fixed top-0 h-screen w-screen z-20 p-6 backdrop-brightness-50">
-        <div class="bg-white h-full p-6 rounded-3xl flex flex-col overflow-y-scroll">
+        <div class="bg-white h-5/6 p-6 rounded-3xl flex flex-col overflow-y-scroll">
             <div class="text-2xl font-bold text-pri-500 text-center mb-6">เพิ่มอาหาร</div>
             <dietary-form ref="dietaryForm" />
-            <div v-if="errorMessage" class="text-rose-600 my-6 text-center text-sm">{{errorMessage}}</div>
-            <div class="mt-auto">
+            <div v-if="errorMessage" class="text-rose-600 mt-6 text-center text-sm">{{errorMessage}}</div>
+            <div class="mt-auto pt-6">
                 <button @click="cancel()" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="bg-sec-500 rounded-full p-3 text-white w-full mb-3">ยกเลิก</button>
                 <button @click="submit()" :disabled="isLoading" :class="{'opacity-30': isLoading}" class="bg-pri-500 rounded-full p-3 text-white w-full">บันทึก</button>
             </div>
@@ -50,10 +50,12 @@ export default {
                 const dietaryForm = this.$refs.dietaryForm
                 let form = dietaryForm.form
                 let data = {}
+                let dataForValidate = {}
                 for (const [key, field] of Object.entries(form)) {
                     data[key] = field.value
+                    if (key !== 'foodImage') dataForValidate[key] = field.value
                 }
-                if (Object.values(data).some(field => field === '')) return this.errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน'
+                if (Object.values(dataForValidate).some(field => field === '')) return this.errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน'
                 // Upload image
                 let storagePath
                 const storage = getStorage()

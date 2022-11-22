@@ -41,21 +41,17 @@
                             class="absolute left-0 w-0 outline-none -z-10"
                         >
                     </div>
-                    <div v-else-if="field.type === 'dropdown'" class="relative ml-1 w-full">
-                        <label @click="openDropdown(`dropdown-${key}`)" :for="`dropdown-${key}`" :class="{'text-gray-400': !field.value}" class="mb-0 -ml-1 block">
-                            <div class="flex items-center justify-between">
-                                {{ field.value }}
-                                <img src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
-                            </div>
-                        </label>
+                    <div v-else-if="field.type === 'dropdown'" class="relative w-full bg-white flex justify-end">
                         <select
                             :id="`dropdown-${key}`"
-                            class="absolute left-0 w-0 outline-none -z-10"
+                            :class="{ 'text-gray-400': !field.value }"
+                            class="absolute outline-none w-full bg-transparent z-10 pr-8 mt-0.5"
                             v-model="field.value"
-                        >
+                            >
                             <option value="" selected disabled>{{ field.placeholder }}</option>
                             <option v-for="(option, oIndex) in field.options" :key="`sex-opt${oIndex}`" :value="option">{{ option }}</option>
                         </select>
+                        <img @click="openDropdown(`dropdown-${key}`)" src="/icons/svg/Right.svg" alt="Chevron Down Icon" class="rotate-90" />
                     </div>
                     <input
                         v-else
@@ -82,6 +78,7 @@
     </div>
 </template>
 <script>
+import $ from 'jquery'
 import axios from 'axios'
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import dayjs from 'dayjs'
@@ -187,7 +184,7 @@ export default {
         },
         openDropdown(key) {
             const element = document.getElementById(key)
-            element.click()
+            element.dispatchEvent(new MouseEvent('mousedown'))
         },
         formatDate(rawDate) {
             return dayjs(rawDate).format('DD/MM/YYYY')
