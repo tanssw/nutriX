@@ -154,7 +154,7 @@ export default {
     },
     async created() {
         let userData = localStorage.getItem('userData')
-        if (!userData) {
+        if (!userData || !userData.includes('deviceId')) {
             userData = await getUserInfo()
             localStorage.setItem('userData', JSON.stringify(userData))
         } else {
@@ -236,7 +236,7 @@ export default {
                 }
                 // Try send the request
                 const result = await axios.put(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo/${this.userObjectId}`, JSON.stringify(body), config)
-                localStorage.setItem('userInfo', JSON.stringify(body.userInfo))
+                localStorage.setItem('userData', JSON.stringify(body.userInfo))
                 this.$router.push({name: 'profile', query: {mode: 'view'}})
             } catch (error) {
                 console.error(error)

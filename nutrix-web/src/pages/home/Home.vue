@@ -60,7 +60,7 @@ export default {
     },
     async created() {
         const localUserData = localStorage.getItem('userData')
-        if (localUserData) return this.userData = JSON.parse(localUserData)
+        if (localUserData && localUserData.includes('deviceId')) return this.userData = JSON.parse(localUserData)
         // Get user data from API
         try {
             const user = await getUserInfo()

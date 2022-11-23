@@ -49,7 +49,10 @@
             >
         </div>
         <div class="mt-6">
-            <button @click="submit()" class="bg-pri-500 text-white disabled:bg-gray-300 p-3 w-full rounded-full" :disabled="!isCompletedForm">
+            <button
+                @click="submit()"
+                class="bg-pri-500 text-white disabled:bg-gray-300 p-3 w-full rounded-full" :disabled="!isCompletedForm"
+            >
                 Save
             </button>
         </div>
@@ -62,6 +65,7 @@ import { v4 as uuidv4 } from 'uuid'
 export default {
     data() {
         return {
+            isLoading: false,
             error: undefined,
             uuid: undefined,
             form: {
@@ -167,7 +171,7 @@ export default {
             // Try send the request
             try {
                 const result = await axios.post(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userInfo`, JSON.stringify(body), config)
-                localStorage.setItem('userInfo', JSON.stringify(body.userInfo))
+                localStorage.setItem('userData', JSON.stringify(body.userInfo))
                 this.$router.push({name: 'home'})
             } catch (error) {
                 this.error = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
