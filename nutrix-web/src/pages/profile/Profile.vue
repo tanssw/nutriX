@@ -114,13 +114,13 @@ export default {
                 weightKg: {
                     value: '',
                     type: 'number',
-                    placeholder: 'น้ำหนัก',
+                    placeholder: 'น้ำหนัก (กก.)',
                     icon: 'weight'
                 },
                 heightCm: {
                     value: '',
                     type: 'number',
-                    placeholder: 'ส่วนสูง',
+                    placeholder: 'ส่วนสูง (ซม.)',
                     icon: 'Height'
                 },
                 physicalActivity: {
