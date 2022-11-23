@@ -67,7 +67,7 @@ export default {
             localStorage.setItem('userData', JSON.stringify(user))
             this.userData = user
         } catch (error) {
-            console.error(error)
+            alert(`เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล (Error: ${error})`)
         }
     },
     methods: {

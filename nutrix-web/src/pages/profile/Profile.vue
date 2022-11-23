@@ -239,7 +239,7 @@ export default {
                 localStorage.setItem('userData', JSON.stringify(body.userInfo))
                 this.$router.push({name: 'profile', query: {mode: 'view'}})
             } catch (error) {
-                console.error(error)
+                alert(`เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล (Error: ${error})`)
             }
         }
     }

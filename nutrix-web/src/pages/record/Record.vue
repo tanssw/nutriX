@@ -96,16 +96,18 @@ export default {
             try {
                 const record = this.records.find(record => record.id == id)
                 // Remove image
-                const storage = getStorage()
-                const foodImageRef = ref(storage, record.foodImagePath)
-                await deleteObject(foodImageRef)
+                if (record.foodImagePath) {
+                    const storage = getStorage()
+                    const foodImageRef = ref(storage, record.foodImagePath)
+                    await deleteObject(foodImageRef)
+                }
                 // Remove row
                 const result = await axios.delete(`${import.meta.env.VITE_APP_SPREADSHEET_API}/userRec/${id}`)
                 this.records = this.records.filter(record => record.id != id)
                 localStorage.setItem('foodRecords', JSON.stringify(this.records))
                 this.isLoading = false
             } catch (error) {
-                alert('เกิดข้อผิดพลาด กรุณาลองใหม่ภายหลัง')
+                alert(`เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล (Error: ${error})`)
             }
         },
         openAddingDialog() {

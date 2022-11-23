@@ -99,8 +99,8 @@ export default {
                 // Close modal
                 this.$router.push({name: 'record', query: { mode: undefined, id: undefined }})
             } catch (error) {
-                // this.errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่ในภายหลัง'
-                this.errorMessage = error
+                this.errorMessage = 'เกิดข้อผิดพลาด กรุณาลองใหม่ในภายหลัง'
+                alert(`เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล (Error: ${error})`)
             } finally {
                 this.isLoading = false
                 window.scrollTo({ top: 0, behavior: 'smooth' })

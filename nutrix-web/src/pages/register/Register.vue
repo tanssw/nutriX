@@ -175,7 +175,7 @@ export default {
                 this.$router.push({name: 'home'})
             } catch (error) {
                 this.error = "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง"
-                console.error(error)
+                alert(`เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล (Error: ${error})`)
             }
         }
     }
