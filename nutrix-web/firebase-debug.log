@@ -1,0 +1,32 @@
+[debug] [2022-11-23T12:11:08.848Z] ----------------------------------------------------------------------
+[debug] [2022-11-23T12:11:08.849Z] Command:       /opt/homebrew/Cellar/node/18.11.0/bin/node /Users/tanssw/.yarn/bin/firebase deploy
+[debug] [2022-11-23T12:11:08.849Z] CLI Version:   11.1.0
+[debug] [2022-11-23T12:11:08.850Z] Platform:      darwin
+[debug] [2022-11-23T12:11:08.850Z] Node Version:  v18.11.0
+[debug] [2022-11-23T12:11:08.853Z] Time:          Wed Nov 23 2022 19:11:08 GMT+0700 (Indochina Time)
+[debug] [2022-11-23T12:11:08.853Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-11-23T12:11:08.883Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-11-23T12:11:08.883Z] > authorizing via signed-in user (tasanai.srisawat@gmail.com)
+[debug] [2022-11-23T12:11:08.883Z] [iam] checking project nutrix-bac97 for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2022-11-23T12:11:08.885Z] > refreshing access token with scopes: []
+[debug] [2022-11-23T12:11:08.886Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2022-11-23T12:11:08.886Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-23T12:11:09.284Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2022-11-23T12:11:09.285Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2022-11-23T12:11:09.299Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/nutrix-bac97:testIamPermissions [none]
+[debug] [2022-11-23T12:11:09.299Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nutrix-bac97:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-23T12:11:10.767Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/nutrix-bac97:testIamPermissions 200
+[debug] [2022-11-23T12:11:10.768Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/nutrix-bac97:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2022-11-23T12:11:10.769Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nutrix-bac97 [none]
+[debug] [2022-11-23T12:11:11.544Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/nutrix-bac97 200
+[debug] [2022-11-23T12:11:11.544Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/nutrix-bac97 {"projectId":"nutrix-bac97","projectNumber":"272900405320","displayName":"nutriX","name":"projects/nutrix-bac97","resources":{"hostingSite":"nutrix-bac97","storageBucket":"nutrix-bac97.appspot.com","locationId":"asia-southeast2"},"state":"ACTIVE","etag":"1_afd1c3cc-3ede-40e0-a4a2-d0263d422032"}
+[info] 
+[info] === Deploying to 'nutrix-bac97'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2022-11-23T12:11:11.549Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/nutrix-bac97 [none]
+[debug] [2022-11-23T12:11:12.925Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/nutrix-bac97 200
+[debug] [2022-11-23T12:11:12.926Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/nutrix-bac97 {"projectId":"nutrix-bac97","projectNumber":"272900405320","displayName":"nutriX","name":"projects/nutrix-bac97","resources":{"hostingSite":"nutrix-bac97","storageBucket":"nutrix-bac97.appspot.com","locationId":"asia-southeast2"},"state":"ACTIVE","etag":"1_afd1c3cc-3ede-40e0-a4a2-d0263d422032"}
+[debug] [2022-11-23T12:11:12.929Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/272900405320/sites/nutrix-bac97/versions [none]
+[debug] [2022-11-23T12:11:12.929Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/272900405320/sites/nutrix-bac97/versions {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
